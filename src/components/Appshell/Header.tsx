@@ -31,7 +31,7 @@ export default function Header() {
     >
       <Group position="apart">
         <NextLink href={"/"}>
-          <Image width={39} height={52} src={"/logo.png"} />
+          <Image width={39} height={52} src={"/Logo.png"} />
         </NextLink>
         <Group spacing={40}>
           {LINKS.map((props, i) =>

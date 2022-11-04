@@ -19,7 +19,7 @@ function App(props: AppProps<{ session: any }>) {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
-        <link rel="shortcut icon" href="/logo.png" type="image/x-icon" />
+        <link rel="shortcut icon" href="/Logo.png" type="image/x-icon" />
       </Head>
 
       <SessionProvider session={pageProps.session}>
