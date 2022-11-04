@@ -2,13 +2,11 @@ import {
   Group,
   Header as H,
   createStyles,
-  Button,
   Text,
   Box,
+  Image,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import ConnectWallet from "../ConnectWallet";
 
