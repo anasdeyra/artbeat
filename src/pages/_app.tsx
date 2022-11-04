@@ -1,6 +1,9 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { MantineProvider } from "@mantine/core";
+import Appshell from "../components/Appshell/Appshell";
+import theme from "../utils/theme";
+import { Global } from "@emotion/react";
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
@@ -15,15 +18,15 @@ export default function App(props: AppProps) {
         />
       </Head>
 
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          /** Put your mantine theme override here */
-          colorScheme: "light",
-        }}
-      >
-        <Component {...pageProps} />
+      <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
+        <Global
+          styles={[
+            `@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');`,
+          ]}
+        />
+        <Appshell>
+          <Component {...pageProps} />
+        </Appshell>
       </MantineProvider>
     </>
   );
