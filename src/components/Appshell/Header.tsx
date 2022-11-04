@@ -5,10 +5,13 @@ import {
   Text,
   Box,
   Image,
+  Avatar,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useRouter } from "next/router";
+import { trpc } from "../../utils/trpc";
 import ConnectWallet from "../ConnectWallet";
+import MainUserButton from "../MainUserButton/MainUserButton";
 
 const useStyles = createStyles((t) => ({
   header: { backgroundColor: "transparent", position: "absolute" },
@@ -17,6 +20,7 @@ const useStyles = createStyles((t) => ({
 export default function Header() {
   const { classes } = useStyles();
   const { pathname } = useRouter();
+  const session = trpc.auth.getSession.useQuery();
   return (
     <H
       className={classes.header}
@@ -31,14 +35,17 @@ export default function Header() {
         </NextLink>
         <Group spacing={40}>
           {LINKS.map((props, i) =>
-            pathname.startsWith(props.link) ? (
+            pathname === props.link ? (
               <Navitem isActive key={i} {...props} />
             ) : (
               <Navitem key={i} {...props} />
             )
           )}
         </Group>
-        <ConnectWallet />
+        <Group spacing={"xl"}>
+          <ConnectWallet />
+          <MainUserButton />
+        </Group>
       </Group>
     </H>
   );

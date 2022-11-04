@@ -4,30 +4,40 @@ import { MantineProvider } from "@mantine/core";
 import Appshell from "../components/Appshell/Appshell";
 import theme from "../utils/theme";
 import { Global } from "@emotion/react";
+import { trpc } from "../utils/trpc";
+import { SessionProvider } from "next-auth/react";
+import { NotificationsProvider } from "@mantine/notifications";
 
-export default function App(props: AppProps) {
+function App(props: AppProps<{ session: any }>) {
   const { Component, pageProps } = props;
 
   return (
     <>
       <Head>
-        <title>Page title</title>
+        <title>ArtBeat</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
+        <link rel="shortcut icon" href="/logo.png" type="image/x-icon" />
       </Head>
 
-      <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
-        <Global
-          styles={[
-            `@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');`,
-          ]}
-        />
-        <Appshell>
-          <Component {...pageProps} />
-        </Appshell>
-      </MantineProvider>
+      <SessionProvider session={pageProps.session}>
+        <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
+          <NotificationsProvider>
+            <Global
+              styles={[
+                `@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');`,
+              ]}
+            />
+            <Appshell>
+              <Component {...pageProps} />
+            </Appshell>
+          </NotificationsProvider>
+        </MantineProvider>
+      </SessionProvider>
     </>
   );
 }
+
+export default trpc.withTRPC(App);
