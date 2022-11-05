@@ -7,21 +7,22 @@ import bcrypt from "bcryptjs";
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
   callbacks: {
-    session({ session, user }) {
+    session({ session, user, token }) {
+      if (token.user) session.user = token.user;
       return session;
     },
     async jwt({ token, user }) {
-      token.user = user;
+      if (user) token.user = user;
       return token;
     },
-    signIn(params) {
+    signIn({ user }) {
       return true;
     },
   },
+  session: { strategy: "jwt" },
 
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
-  session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. "Sign in with...")
