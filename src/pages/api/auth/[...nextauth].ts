@@ -8,6 +8,7 @@ export const authOptions: NextAuthOptions = {
   // Include user.id on session
   callbacks: {
     session({ session, user, token }) {
+      // @ts-ignore
       if (token.user) session.user = token.user;
       return session;
     },

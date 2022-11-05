@@ -236,6 +236,7 @@ export default function PostNFT() {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getServerAuthSession(ctx);
   //if not admin redirect
+  // @ts-ignore
   if (session?.user?.role !== "admin")
     return {
       redirect: { destination: "/", permanent: false },
