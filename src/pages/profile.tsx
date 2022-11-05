@@ -1,11 +1,8 @@
-import React, { useEffect } from "react";
-import ABI from "../utils/ABI.json";
+import React from "react";
 
-import Web3 from "web3";
 import {
   Avatar,
   Box,
-  Container,
   createStyles,
   Group,
   Paper,

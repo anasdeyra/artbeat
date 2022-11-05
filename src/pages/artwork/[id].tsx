@@ -77,7 +77,7 @@ export default function Artwork() {
         <Title size={36} order={2}>
           <span style={{ color: "#C4811C" }}>Recommended</span> Artworks
         </Title>
-        <SimpleGrid mt={"xl"} cols={4}>
+        <SimpleGrid spacing={"lg"} mt={"xl"} cols={4}>
           <NFTExploreCard />
           <NFTExploreCard />
           <NFTExploreCard />

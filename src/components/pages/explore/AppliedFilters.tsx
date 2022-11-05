@@ -1,4 +1,5 @@
 import { Badge, Group, Text } from "@mantine/core";
+import { FiX } from "react-icons/fi";
 
 export default function AppliedFilters() {
   return (
@@ -7,6 +8,7 @@ export default function AppliedFilters() {
       <Group spacing={"xs"}>
         <Badge variant="outline" color={"brand"}>
           Verified
+          <FiX />
         </Badge>
       </Group>
     </Group>
