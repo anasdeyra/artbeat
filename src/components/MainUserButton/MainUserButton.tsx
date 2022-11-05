@@ -16,7 +16,9 @@ export default function MainUserButton() {
       <Menu.Dropdown>
         {data ? (
           <>
-            <Menu.Item>Profile</Menu.Item>
+            <Menu.Item href={"/profile"} component={NextLink}>
+              Profile
+            </Menu.Item>
             <Menu.Item>Settings</Menu.Item>
             <Menu.Divider></Menu.Divider>
             <Menu.Item
