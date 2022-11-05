@@ -6,7 +6,7 @@ import {
   Space,
   Stack,
 } from "@mantine/core";
-import NFTCard from "../components/nft/NFTCard";
+import NFTExploreCard from "../components/nft/NFTExploreCard";
 import AppliedFilters from "../components/pages/explore/AppliedFilters";
 import Filters from "../components/pages/explore/Filters";
 import Pagination from "../components/pages/explore/Pagination";
@@ -15,8 +15,7 @@ import TopFilters from "../components/pages/explore/TopFilters";
 const useStyles = createStyles((t) => ({
   banner: {
     width: "100%",
-    backgroundImage:
-      "url('https://images.unsplash.com/photo-1628432300911-cc9f392e47cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80')",
+    backgroundImage: "url('/explore-banner.jpg')",
     height: 96,
     backgroundSize: "cover",
     backgroundPosition: "bottom",
@@ -25,6 +24,7 @@ const useStyles = createStyles((t) => ({
   filtersContainer: {
     borderLeft: "1px solid #875A28",
     width: 300,
+    height: "100%",
   },
 }));
 
@@ -33,20 +33,25 @@ export default function Explore() {
   return (
     <Box>
       <Box className={classes.banner} />
-      <Group px={"xl"} align={"start"}>
-        <Stack mt={"xl"} sx={{ flexGrow: 1 }}>
+      <Group spacing={"xl"} px={"xl"} align={"start"}>
+        <Stack spacing={"xl"} mt={"xl"} style={{ flexGrow: 1 }}>
           <TopFilters />
           <AppliedFilters />
-          <SimpleGrid sx={{ width: "full" }} cols={3}>
-            <NFTCard />
-            <NFTCard />
-            <NFTCard />
+          <SimpleGrid mt={"md"} spacing={"xl"} sx={{ width: "full" }} cols={3}>
+            {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
+              <NFTExploreCard key={i} />
+            ))}
           </SimpleGrid>
-          <Box sx={{ alignSelf: "end" }}>
-            <Pagination />
+          <Box mt={"xl"} sx={{ alignSelf: "end" }}>
+            <Pagination active={1} pageCount={9} />
           </Box>
         </Stack>
-        <Stack align={"center"} className={classes.filtersContainer}>
+        <Stack
+          pb={48}
+          px={"xl"}
+          align={"center"}
+          className={classes.filtersContainer}
+        >
           <Space mt="xl" />
           <Filters />
         </Stack>

@@ -97,12 +97,12 @@ export default function Profile() {
                 a kid. I usually create oil-on-canvas paintings. Support me if
                 you like my artworks!
               </Text>
-              <Title mt={"xl"} order={4}>
+              <Title color={"#111"} mt={"xl"} order={4}>
                 Total Collection
               </Title>
               <Group sx={{ color: "#111" }} spacing={"xs"} align={"center"}>
                 <IoMdColorPalette size={24} />
-                <Text weight={500}>4 Arts</Text>
+                <Text weight={500}>4 Artworks</Text>
               </Group>
             </Stack>
           </Paper>

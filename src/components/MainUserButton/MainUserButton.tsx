@@ -1,21 +1,16 @@
 import { ActionIcon, Menu } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/router";
 import { BiUser } from "react-icons/bi";
 import { trpc } from "../../utils/trpc";
 
 export default function MainUserButton() {
   const { data } = trpc.auth.getSession.useQuery();
-  const { pathname } = useRouter();
   return (
     <Menu>
       <Menu.Target>
-        <ActionIcon variant="transparent" size={"lg"}>
-          <BiUser
-            color={pathname === "/profile" ? "#875A28" : "white"}
-            size={32}
-          />
+        <ActionIcon color={undefined} variant="transparent" size={"lg"}>
+          <BiUser color="white" size={32} />
         </ActionIcon>
       </Menu.Target>
       <Menu.Dropdown>
