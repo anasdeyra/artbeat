@@ -120,7 +120,7 @@ export default function profile() {
           <Title color="brand" order={1}>
             My <span style={{ color: "#111" }}>collection</span>
           </Title>
-          <SimpleGrid sx={{ width: "full" }} cols={3}>
+          <SimpleGrid mt={"xl"} sx={{ width: "full" }} cols={3}>
             <NFTCard />
             <NFTCard />
             <NFTCard />

@@ -19,9 +19,9 @@ export default function NFTCard() {
           <Avatar
             src="https://images.unsplash.com/photo-1505962577034-fc157cf5b274?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80"
             radius={999}
-            size={24}
+            size={20}
           />{" "}
-          <Text size={"sm"}>Anas Deyra</Text> <MdVerified color="#00f" />
+          <Text size={"sm"}>Anas Deyra</Text> <MdVerified color="#00c" />
         </Group>
       </Group>
     </Card>

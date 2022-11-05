@@ -90,7 +90,6 @@ export default function SignUp() {
                       label="email"
                       color="brand"
                       placeholder="example@email.com"
-                      variant="unstyled"
                       icon={<BiEnvelope color="#875A28" size={24} />}
                     />
 
@@ -100,7 +99,6 @@ export default function SignUp() {
                       styles={inputStyles}
                       label="password"
                       color="brand"
-                      variant="unstyled"
                       icon={<BiLock color="#875A28" size={24} />}
                     />
 
