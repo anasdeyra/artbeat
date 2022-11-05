@@ -7,10 +7,10 @@ import {
   Stack,
 } from "@mantine/core";
 import NFTCard from "../components/nft/NFTCard";
-import AppliedFilters from "../components/pages/explore/appliedFilters";
+import AppliedFilters from "../components/pages/explore/AppliedFilters";
 import Filters from "../components/pages/explore/Filters";
 import Pagination from "../components/pages/explore/Pagination";
-import TopFilters from "../components/pages/explore/topFilters";
+import TopFilters from "../components/pages/explore/TopFilters";
 
 const useStyles = createStyles((t) => ({
   banner: {
@@ -28,7 +28,7 @@ const useStyles = createStyles((t) => ({
   },
 }));
 
-export default function artwork() {
+export default function Explore() {
   const { classes } = useStyles();
   return (
     <Box>

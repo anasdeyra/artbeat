@@ -18,43 +18,45 @@ import { IoMdColorPalette } from "react-icons/io";
 import { NextLink } from "@mantine/next";
 import NFTCard from "../components/nft/NFTCard";
 
-async function getMyNFTs() {
-  const web3 = new Web3(window.ethereum);
-  await window.ethereum.enable();
-  const chainId = 1029; // BTT
+// async function getMyNFTs() {
+//   try {
+//     const web3 = new Web3(window.ethereum);
+//     await window.ethereum.enable();
+//     const chainId = 1029; // BTT
 
-  if (window.ethereum.networkVersion !== chainId) {
-    try {
-      await window.ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: web3.utils.toHex(chainId) }],
-      });
-    } catch (err) {
-      // This error code indicates that the chain has not been added to MetaMask
-      if (err.code === 4902) {
-        await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainName: "BitTorrent Chain Donau",
-              chainId: web3.utils.toHex(chainId),
-              nativeCurrency: { name: "BTT", decimals: 18, symbol: "BTT" },
-              rpcUrls: ["https://pre-rpc.bt.io/"],
-              blockExplorerUrls: ["https://testscan.bt.io"],
-            },
-          ],
-        });
-      }
-    }
-  }
+//     if (window.ethereum.networkVersion !== chainId) {
+//       try {
+//         await window.ethereum.request({
+//           method: "wallet_switchEthereumChain",
+//           params: [{ chainId: web3.utils.toHex(chainId) }],
+//         });
+//       } catch (err) {
+//         // This error code indicates that the chain has not been added to MetaMask
+//         if (err.code === 4902) {
+//           await window.ethereum.request({
+//             method: "wallet_addEthereumChain",
+//             params: [
+//               {
+//                 chainName: "BitTorrent Chain Donau",
+//                 chainId: web3.utils.toHex(chainId),
+//                 nativeCurrency: { name: "BTT", decimals: 18, symbol: "BTT" },
+//                 rpcUrls: ["https://pre-rpc.bt.io/"],
+//                 blockExplorerUrls: ["https://testscan.bt.io"],
+//               },
+//             ],
+//           });
+//         }
+//       }
+//     }
 
-  const contract = new web3.eth.Contract(
-    ABI,
-    "0x2480aEA0FfABcF3bb8b92E6819B4201717f68BF4"
-  );
-  const myNfts = await contract.methods.getAllNFTs.call().call();
-  console.log(myNfts);
-}
+//     const contract = new web3.eth.Contract(
+//       ABI,
+//       "0x2480aEA0FfABcF3bb8b92E6819B4201717f68BF4"
+//     );
+//     const myNfts = await contract.methods.getAllNFTs.call().call();
+//     console.log(myNfts);
+//   } catch {}
+// }
 
 const useStyles = createStyles((t) => ({
   banner: {
@@ -66,7 +68,7 @@ const useStyles = createStyles((t) => ({
   },
 }));
 
-export default function profile() {
+export default function Profile() {
   const { classes } = useStyles();
   // useEffect(() => {}, [getMyNFTs()]);
 
