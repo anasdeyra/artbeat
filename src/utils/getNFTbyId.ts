@@ -30,28 +30,3 @@ export async function getNFTbyId(tokenId) {
   };
   return item;
 }
-
-async function buyNFT(tokenId) {
-  try {
-    //After adding your Hardhat network to your metamask, this code will get providers and signers
-    // @ts-ignore
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    //Pull the deployed contract instance
-    const contract = new ethers.Contract(
-      "0x2480aEA0FfABcF3bb8b92E6819B4201717f68BF4",
-      ABI,
-      signer
-    );
-    // @ts-ignore
-    const salePrice = ethers.utils.parseUnits(data.price, "ether");
-    const transaction = await contract.executeSale(tokenId, {
-      value: salePrice,
-    });
-    await transaction.wait();
-
-    alert("You successfully bought the NFT!");
-  } catch (e) {
-    alert("Upload Error" + e);
-  }
-}

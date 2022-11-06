@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import { showNotification } from "@mantine/notifications";
 import { getAllNFTs } from "../../utils/getAllNFTs";
 import { getNFTbyId } from "../../utils/getNFTbyId";
+import { buyNFT } from "../../utils/buyNFT";
 
 const useStyles = createStyles((t) => ({
   container: {
@@ -114,7 +115,14 @@ export default function Artwork() {
               <Text mt={"xl"} size={24} weight={"bold"}>
                 Price: {nft.metadata.price} BTT
               </Text>
-              <Button size="lg">Buy now</Button>
+              <Button
+                onClick={() => {
+                  buyNFT(nft);
+                }}
+                size="lg"
+              >
+                Buy now
+              </Button>
             </Stack>
           </Group>
         )}

@@ -32,6 +32,7 @@ export async function getAllNFTs() {
         owner: i.owner,
         metadata: meta,
       };
+
       return item;
     })
   );
