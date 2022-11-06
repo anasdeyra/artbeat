@@ -6,9 +6,11 @@ export default function AppliedFilters() {
     <Group>
       <Text>Showing 1-12 from 115 Arts</Text>
       <Group spacing={"xs"}>
-        <Badge variant="outline" color={"brand"}>
-          Verified
-          <FiX />
+        <Badge sx={{ cursor: "pointer" }} variant="outline" color={"brand"}>
+          <Group align={"center"} spacing={0}>
+            Verified
+            <FiX />
+          </Group>
         </Badge>
       </Group>
     </Group>

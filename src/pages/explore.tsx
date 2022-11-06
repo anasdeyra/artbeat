@@ -5,12 +5,19 @@ import {
   SimpleGrid,
   Space,
   Stack,
+  Loader,
+  Center,
 } from "@mantine/core";
-import NFTExploreCard from "../components/nft/NFTExploreCard";
+import NFTExploreCard, { NFT } from "../components/nft/NFTExploreCard";
 import AppliedFilters from "../components/pages/explore/AppliedFilters";
 import Filters from "../components/pages/explore/Filters";
 import Pagination from "../components/pages/explore/Pagination";
 import TopFilters from "../components/pages/explore/TopFilters";
+import ABI from "../utils/ABI.json";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { showNotification } from "@mantine/notifications";
+import { getAllNFTs } from "../utils/getAllNFTs";
 
 const useStyles = createStyles((t) => ({
   banner: {
@@ -30,18 +37,48 @@ const useStyles = createStyles((t) => ({
 
 export default function Explore() {
   const { classes } = useStyles();
+  const [nfts, setNfts] = useState<NFT[]>([]);
+  const [isFetching, setIsFetching] = useState(false);
+  useEffect(() => {
+    setIsFetching(true);
+    getAllNFTs()
+      .then((n) => {
+        setNfts(n);
+      })
+      .catch(() => {
+        showNotification({
+          message: "there was a problem fetching the NFTs",
+          color: "red",
+        });
+      })
+      .finally(() => {
+        setIsFetching(false);
+      });
+  }, []);
   return (
-    <Box>
+    <Box mb={96}>
       <Box className={classes.banner} />
       <Group spacing={"xl"} px={"xl"} align={"start"}>
         <Stack spacing={"xl"} mt={"xl"} style={{ flexGrow: 1 }}>
           <TopFilters />
           <AppliedFilters />
-          <SimpleGrid mt={"md"} spacing={"xl"} sx={{ width: "full" }} cols={3}>
-            {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
-              <NFTExploreCard key={i} />
-            ))}
-          </SimpleGrid>
+          {isFetching ? (
+            <Center mt={"md"}>
+              <Loader />
+            </Center>
+          ) : (
+            <SimpleGrid
+              mt={"md"}
+              spacing={"xl"}
+              sx={{ width: "full" }}
+              cols={3}
+            >
+              {nfts.map((props, i) => (
+                <NFTExploreCard {...props} key={i} />
+              ))}{" "}
+            </SimpleGrid>
+          )}
+
           <Box mt={"xl"} sx={{ alignSelf: "end" }}>
             <Pagination active={1} pageCount={9} />
           </Box>

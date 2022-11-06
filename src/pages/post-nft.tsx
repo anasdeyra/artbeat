@@ -18,15 +18,18 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { NextLink } from "@mantine/next";
+
 import { showNotification } from "@mantine/notifications";
+import { ethers } from "ethers";
 import { GetServerSideProps } from "next";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { BiEnvelope, BiLock } from "react-icons/bi";
+
 import ImageUpload from "../components/pages/post-nft/ImageUpload";
 import { getServerAuthSession } from "../server/common/get-server-auth-session";
+import { uploadFileToIPFS, uploadJSONToIPFS } from "../utils/pinata";
+import ABI from "../utils/ABI.json";
 
 const useStyles = createStyles((t) => ({
   banner: {
@@ -71,6 +74,71 @@ export default function PostNFT() {
   });
   const imageUrl = form.values.image && URL.createObjectURL(form.values.image);
 
+  async function uploadMetadataToIPFS() {
+    const { image, ...fromValues } = form.values;
+    //uploading image to ipfs
+
+    const uploadImage = await uploadFileToIPFS(image);
+    if (uploadImage.success === true) {
+      //@ts-ignore
+      console.log("Uploaded image to Pinata: ", uploadImage.pinataURL);
+    }
+
+    const nftJSON = {
+      ...fromValues,
+      //@ts-ignore
+      image: uploadImage.pinataURL,
+    };
+
+    try {
+      //upload the metadata JSON to IPFS
+      const response = await uploadJSONToIPFS(nftJSON);
+      if (response.success === true) {
+        console.log("Uploaded JSON to Pinata: ", response);
+        //@ts-ignore
+        return response.pinataURL;
+      }
+    } catch (e) {
+      console.log("error uploading JSON metadata:", e);
+    }
+  }
+
+  async function listNFT() {
+    //Upload data to IPFS
+    try {
+      const metadataURL = await uploadMetadataToIPFS();
+      //After adding your Hardhat network to your metamask, this code will get providers and signers
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      showNotification({ message: "Please wait.. uploading (upto 5 mins)" });
+
+      //Pull the deployed contract instance
+      const contract = new ethers.Contract(
+        "0x2480aEA0FfABcF3bb8b92E6819B4201717f68BF4",
+        ABI,
+        signer
+      );
+
+      //massage the params to be sent to the create NFT request
+      const price = ethers.utils.parseUnits(form.values.price, "ether");
+      let listingPrice = await contract.getListPrice();
+      listingPrice = listingPrice.toString();
+
+      //actually create the NFT
+      const transaction = await contract.createToken(metadataURL, price, {
+        value: listingPrice,
+      });
+      await transaction.wait();
+
+      showNotification({
+        color: "green",
+        message: "Successfully listed your NFT!",
+      });
+    } catch (e) {
+      showNotification({ color: "red", message: "Upload error" + e });
+    }
+  }
+
   return (
     <Box mb={96}>
       <Box className={classes.banner}>
@@ -92,20 +160,11 @@ export default function PostNFT() {
             <Paper className={classes.container} shadow={"lg"} radius="lg">
               <Container p={24}>
                 <form
-                  onSubmit={form.onSubmit((data) => {
+                  onSubmit={form.onSubmit(() => {
                     setIsLoading(true);
-                    signIn("credentials", { redirect: false, ...data })
-                      .then((e) => {
-                        if (e.error === "CredentialsSignin")
-                          return showNotification({
-                            message: "Wrong Email and password combination!",
-                            color: "red",
-                          });
-                        router.reload();
-                      })
-                      .finally(() => {
-                        setIsLoading(false);
-                      });
+                    listNFT().finally(() => {
+                      setIsLoading(false);
+                    });
                   })}
                 >
                   <Stack spacing={"xl"}>
