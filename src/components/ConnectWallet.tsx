@@ -8,7 +8,7 @@ async function connect() {
       message: "A wallet was not detected",
       color: "red",
     });
-  await window.ethereum.send("eth_requestAccounts", []);
+  await window.ethereum.request({ method: "eth_requestAccounts" });
 
   const chainId = "0x405"; // BTT
 

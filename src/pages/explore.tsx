@@ -58,7 +58,7 @@ export default function Explore() {
   return (
     <Box mb={96}>
       <Box className={classes.banner} />
-      <Group spacing={"xl"} px={"xl"} align={"start"}>
+      <Group noWrap spacing={"xl"} px={"xl"} align={"start"}>
         <Stack spacing={"xl"} mt={"xl"} style={{ flexGrow: 1 }}>
           <TopFilters />
           <AppliedFilters />

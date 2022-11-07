@@ -23,7 +23,13 @@ const useStyles = createStyles((t) => ({
 export default function Hero() {
   const { classes } = useStyles();
   return (
-    <SimpleGrid px={155} pt={155 + 64} className={classes.container} cols={2}>
+    <SimpleGrid
+      px={155}
+      pb={155}
+      pt={155 + 64}
+      className={classes.container}
+      cols={2}
+    >
       <Overlay zIndex={0} opacity={0.6} color="#000" />
       <Stack align={"start"} sx={{ zIndex: 1 }}>
         <Title size={64}>

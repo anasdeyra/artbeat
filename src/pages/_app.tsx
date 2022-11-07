@@ -7,6 +7,7 @@ import { Global } from "@emotion/react";
 import { trpc } from "../utils/trpc";
 import { SessionProvider } from "next-auth/react";
 import { NotificationsProvider } from "@mantine/notifications";
+import Footer from "../components/Appshell/Footer";
 
 function App(props: AppProps<{ session: any }>) {
   const { Component, pageProps } = props;
@@ -32,6 +33,7 @@ function App(props: AppProps<{ session: any }>) {
             />
             <Appshell>
               <Component {...pageProps} />
+              <Footer />
             </Appshell>
           </NotificationsProvider>
         </MantineProvider>

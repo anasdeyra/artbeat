@@ -1,18 +1,30 @@
-import { Button, Card, Group, Image, Text, Title } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Card,
+  Group,
+  Image,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import { NextLink } from "@mantine/next";
 
 export default function NFTExploreCard({ metadata, price, tokenId }: NFT) {
   return (
-    <Card shadow="sm" p="sm" radius="md">
+    <Card shadow="md" p="sm" radius="md">
       <Card.Section>
-        <Image fit="contain" src={metadata.image} height={160} />
+        <Image src={metadata.image} height={160} />
       </Card.Section>
-      <Title mt={"xl"} color={"brand"} size={18} order={3}>
-        {metadata.title}
-      </Title>
-      <Text mt={4} size={"sm"}>
-        Art by: {metadata.artist}
-      </Text>
+
+      <Box>
+        <Title mt={"xl"} color={"brand"} size={18} order={3}>
+          {metadata.title}
+        </Title>
+        <Text mt={4} size={"sm"}>
+          Art by: {metadata.artist}
+        </Text>
+      </Box>
       <Group mt={"lg"} position="apart">
         <Text weight={"bold"}>{price} BBT</Text>
         <Button component={NextLink} href={`/artwork/${tokenId}`} size="xs">

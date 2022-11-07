@@ -30,7 +30,7 @@ export default function Filters() {
 function SelectedArtists() {
   return (
     <Box>
-      <Text weight={500}>
+      <Text size={"lg"} weight={500}>
         Seleted <span style={{ color: "#DDAB46" }}>Artists</span>
       </Text>
       <Divider color={"#DDAB46"} />
@@ -63,7 +63,7 @@ function SelectedArtists() {
 function SelectedMuseums() {
   return (
     <Box>
-      <Text weight={500}>
+      <Text size={"lg"} weight={500}>
         Seleted <span style={{ color: "#DDAB46" }}>Museums</span>
       </Text>
       <Divider color={"#DDAB46"} />
@@ -103,10 +103,12 @@ function SelectedCard({
   body: string;
 }) {
   return (
-    <Group>
+    <Group align={"start"} noWrap>
       <Avatar radius={999} size={48} src={image} />
       <Box>
-        <Text weight={500}>{name}</Text>
+        <Text size={"sm"} weight={500}>
+          {name}
+        </Text>
         <Text size={"sm"}>{body}</Text>
       </Box>
     </Group>
