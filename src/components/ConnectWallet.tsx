@@ -30,6 +30,7 @@ async function connect() {
               nativeCurrency: { name: "BTT", decimals: 18, symbol: "BTT" },
               rpcUrls: ["https://pre-rpc.bt.io/"],
               blockExplorerUrls: ["https://testscan.bt.io"],
+              iconUrls: ["https://static.bt.io/production/logo/1002000.png"],
             },
           ],
         });

@@ -17,12 +17,6 @@ const useStyles = createStyles((t) => ({
     position: "relative",
     color: "white",
   },
-  container: {
-    maxWidth: 700,
-    width: 700,
-    marginTop: t.spacing.xl * 2,
-    zIndex: 1,
-  },
 }));
 
 export default function About() {

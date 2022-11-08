@@ -1,6 +1,6 @@
 import { ActionIcon, Group, Image, Stack, Text, Title } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import { FaDiscord, FaTwitter, FaTelegram } from "react-icons/fa";
+import { FaDiscord, FaTwitter, FaTelegramPlane } from "react-icons/fa";
 
 export default function Footer() {
   return (
@@ -54,7 +54,7 @@ export default function Footer() {
 const SOCIALS = [
   { Icon: FaTwitter, link: "/#" },
   { Icon: FaDiscord, link: "/#" },
-  { Icon: FaTelegram, link: "/#" },
+  { Icon: FaTelegramPlane, link: "/#" },
 ];
 
 const LINKS = [

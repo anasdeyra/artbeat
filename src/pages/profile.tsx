@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Avatar,
   Box,
+  Center,
   createStyles,
   Group,
+  Loader,
   Paper,
   SimpleGrid,
   Stack,
@@ -14,6 +16,10 @@ import {
 import { IoMdColorPalette } from "react-icons/io";
 import { NextLink } from "@mantine/next";
 import NFTCard from "../components/nft/NFTCard";
+import { NFT } from "../components/nft/NFTExploreCard";
+import { getMyNFTs } from "../utils/getMyNFTs";
+import { showNotification } from "@mantine/notifications";
+import { trpc } from "../utils/trpc";
 
 const useStyles = createStyles((t) => ({
   banner: {
@@ -27,7 +33,25 @@ const useStyles = createStyles((t) => ({
 
 export default function Profile() {
   const { classes } = useStyles();
-  // useEffect(() => {}, [getMyNFTs()]);
+  const { data } = trpc.auth.getSession.useQuery();
+  const [nfts, setNfts] = useState<NFT[]>([]);
+  const [isFetching, setIsFetching] = useState(false);
+  useEffect(() => {
+    setIsFetching(true);
+    getMyNFTs()
+      .then((n) => {
+        setNfts(n);
+      })
+      .catch(() => {
+        showNotification({
+          message: "there was a problem fetching the NFTs",
+          color: "red",
+        });
+      })
+      .finally(() => {
+        setIsFetching(false);
+      });
+  }, []);
 
   return (
     <Box mb={96}>
@@ -41,13 +65,9 @@ export default function Profile() {
               sx={{ width: 300 }}
               align={"center"}
             >
-              <Avatar
-                radius={999}
-                src="https://images.unsplash.com/photo-1505962577034-fc157cf5b274?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80"
-                size={140}
-              />
+              <Avatar radius={999} src={data?.user?.image} size={140} />
               <Title mt={"xl"} order={2} color="brand">
-                Zack Afron
+                {data?.user?.name}
               </Title>
               <Text color={"muted"} align="center">
                 Hi, I’m Zack! I’ve always been passionate about art since I was
@@ -59,7 +79,9 @@ export default function Profile() {
               </Title>
               <Group sx={{ color: "#111" }} spacing={"xs"} align={"center"}>
                 <IoMdColorPalette size={24} />
-                <Text weight={500}>4 Artworks</Text>
+                <Text weight={500}>
+                  {nfts.length} Artwork{nfts.length > 1 ? "s" : ""}
+                </Text>
               </Group>
             </Stack>
           </Paper>
@@ -79,11 +101,17 @@ export default function Profile() {
           <Title color="brand" order={1}>
             My <span style={{ color: "#111" }}>collection</span>
           </Title>
-          <SimpleGrid mt={"xl"} sx={{ width: "full" }} cols={3}>
-            <NFTCard />
-            <NFTCard />
-            <NFTCard />
-          </SimpleGrid>
+          {isFetching ? (
+            <Center mt={"md"}>
+              <Loader />
+            </Center>
+          ) : (
+            <SimpleGrid mt={"xl"} sx={{ width: "full" }} cols={3}>
+              {nfts.map((props, i) => (
+                <NFTCard key={i} {...props} />
+              ))}
+            </SimpleGrid>
+          )}
         </Stack>
       </Group>
     </Box>

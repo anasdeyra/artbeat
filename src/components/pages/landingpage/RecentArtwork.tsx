@@ -1,3 +1,4 @@
+import { Carousel } from "@mantine/carousel";
 import {
   Box,
   Button,
@@ -15,7 +16,7 @@ import { showNotification } from "@mantine/notifications";
 import { useEffect, useState } from "react";
 import { getAllNFTs } from "../../../utils/getAllNFTs";
 import NFTExploreCard, { NFT } from "../../nft/NFTExploreCard";
-import RecentArtworkCarousel from "./RecentArtworkCarousel";
+import RecentArtworkCarousel from "./CustomCarousel";
 
 const useStyles = createStyles((t) => ({
   container: { position: "relative" },
@@ -47,14 +48,14 @@ export default function RecentArtwork() {
       });
   }, []);
   return (
-    <Box my={52} px={"xl"}>
+    <Box my={96} px={"xl"}>
       <Center>
         <Paper
           mx={"auto"}
           radius={"lg"}
           p="md"
           shadow={"xl"}
-          mt={-48 - 52}
+          mt={-48 - 128}
           className={classes.filter}
         >
           <Group spacing={72}>
@@ -93,7 +94,13 @@ export default function RecentArtwork() {
           <Loader />
         </Center>
       ) : (
-        <RecentArtworkCarousel nfts={nfts.reverse()} />
+        <RecentArtworkCarousel>
+          {nfts.reverse().map((nft, i) => (
+            <Carousel.Slide key={i}>
+              <NFTExploreCard {...nft} />
+            </Carousel.Slide>
+          ))}
+        </RecentArtworkCarousel>
       )}
     </Box>
   );

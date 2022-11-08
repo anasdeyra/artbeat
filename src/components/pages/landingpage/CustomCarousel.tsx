@@ -1,8 +1,10 @@
 import { Carousel } from "@mantine/carousel";
-import { Box } from "@mantine/core";
-import NFTExploreCard, { NFT } from "../../nft/NFTExploreCard";
 
-export default function RecentArtworkCarousel({ nfts }: { nfts: NFT[] }) {
+export default function CustomCarousel({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <Carousel
       styles={{
@@ -18,11 +20,7 @@ export default function RecentArtworkCarousel({ nfts }: { nfts: NFT[] }) {
       ]}
       align="start"
     >
-      {nfts.map((nft, i) => (
-        <Carousel.Slide key={i}>
-          <NFTExploreCard {...nft} />
-        </Carousel.Slide>
-      ))}
+      {children}
     </Carousel>
   );
 }
