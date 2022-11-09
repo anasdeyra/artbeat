@@ -179,6 +179,7 @@ function RecommendedEvents() {
       >
         {[1, 1, 1, 1].map((_, i) => (
           <NFTExploreCard
+            key={i}
             //@ts-ignore
             price="500"
             //@ts-ignore
