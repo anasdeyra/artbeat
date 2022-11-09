@@ -142,23 +142,23 @@ function Overview() {
                 07.00 AM - 11.00 AM
               </Text>
             </Stack>
-            <Text mt={"md"} weight={500} size={"lg"}>
-              In the world of the Ancient Greeks and Romans sculpture was one of
-              the most important means of expression and communication. Every
-              single statue, head and relief was produced with an eye to its
-              specific purpose and message. In most cases the sculpture was set
-              up in the public space, e.g. the city’s market place, burial
-              ground, theatre and sanctuary. The multiple meanings and functions
-              of sculpture in Antiquity can be experienced in the fourteen rooms
-              which house Glyptoteket’s extensive collection of ancient
-              sculpture from the Mediterranean world – primarily from Greece and
-              the Roman Empire. The exhibition is a journey through a crucial
-              chapter in European cultural history. From around 600 BCE when
-              Greek large-scale sculpture emerged, to c. 400 CE the Roman
-              Empire. When its form of government and religion, had to make way
-              for Christianity and the Empire of Byzantium.
-            </Text>
           </Group>
+          <Text mt={"md"} weight={500} size={"lg"}>
+            In the world of the Ancient Greeks and Romans sculpture was one of
+            the most important means of expression and communication. Every
+            single statue, head and relief was produced with an eye to its
+            specific purpose and message. In most cases the sculpture was set up
+            in the public space, e.g. the city’s market place, burial ground,
+            theatre and sanctuary. The multiple meanings and functions of
+            sculpture in Antiquity can be experienced in the fourteen rooms
+            which house Glyptoteket’s extensive collection of ancient sculpture
+            from the Mediterranean world – primarily from Greece and the Roman
+            Empire. The exhibition is a journey through a crucial chapter in
+            European cultural history. From around 600 BCE when Greek
+            large-scale sculpture emerged, to c. 400 CE the Roman Empire. When
+            its form of government and religion, had to make way for
+            Christianity and the Empire of Byzantium.
+          </Text>
         </Stack>
         <Stack className={classes.ticket}>
           <Title color={"#C4811C"} order={2}>
