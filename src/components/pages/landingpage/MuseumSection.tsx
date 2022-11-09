@@ -1,22 +1,7 @@
 import { Carousel } from "@mantine/carousel";
-import {
-  Box,
-  Button,
-  Center,
-  createStyles,
-  Group,
-  Loader,
-  Paper,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Box, createStyles, Group, Text, Title } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import { showNotification } from "@mantine/notifications";
-import { useEffect, useState } from "react";
-import { getAllNFTs } from "../../../utils/getAllNFTs";
-import NFTExploreCard, { NFT } from "../../nft/NFTExploreCard";
 import CustomCarousel from "./CustomCarousel";
-import RecentArtworkCarousel from "./CustomCarousel";
 import MuseumCard from "./MuseumCard";
 
 const useStyles = createStyles((t) => ({

@@ -5,7 +5,6 @@ import {
   Text,
   Box,
   Image,
-  Avatar,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useRouter } from "next/router";
@@ -15,6 +14,7 @@ import MainUserButton from "../MainUserButton/MainUserButton";
 
 const useStyles = createStyles((t) => ({
   header: { backgroundColor: "transparent", position: "absolute" },
+  navLinks: { [t.fn.smallerThan("sm")]: { display: "none" } },
 }));
 
 export default function Header() {
@@ -33,7 +33,7 @@ export default function Header() {
         <NextLink href={"/"}>
           <Image width={39} height={52} src={"/Logo.png"} />
         </NextLink>
-        <Group spacing={40}>
+        <Group className={classes.navLinks} spacing={40}>
           {LINKS.map((props, i) =>
             pathname === props.link ? (
               <Navitem isActive key={i} {...props} />

@@ -39,8 +39,7 @@ export default function Artwork() {
   const router = useRouter();
   const [nfts, setNfts] = useState<NFT[]>([]);
   const [isFetching, setIsFetching] = useState(false);
-  const { query } = useRouter();
-  const tokenId = query.id;
+  const tokenId = router.query.id;
   const [nft, setNft] = useState<NFT>(null);
 
   useEffect(() => {
