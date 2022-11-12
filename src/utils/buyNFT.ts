@@ -1,6 +1,7 @@
 import { showNotification } from "@mantine/notifications";
 import { ethers } from "ethers";
 import { NFT } from "../components/nft/NFTExploreCard";
+import { CONTRACT_ADDRESS } from "../const";
 import ABI from "./ABI.json";
 
 export async function buyNFT(nft: NFT) {
@@ -10,11 +11,7 @@ export async function buyNFT(nft: NFT) {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     //Pull the deployed contract instance
-    const contract = new ethers.Contract(
-      "0x2480aEA0FfABcF3bb8b92E6819B4201717f68BF4",
-      ABI,
-      signer
-    );
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
     // @ts-ignore
     const salePrice = ethers.utils.parseUnits(nft.metadata.price, "ether");
     const transaction = await contract.executeSale(nft.tokenId, {

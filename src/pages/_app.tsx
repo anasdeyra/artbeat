@@ -8,6 +8,7 @@ import { trpc } from "../utils/trpc";
 import { SessionProvider } from "next-auth/react";
 import { NotificationsProvider } from "@mantine/notifications";
 import Footer from "../components/Appshell/Footer";
+import { MetaMaskProvider } from "metamask-react";
 
 function App(props: AppProps<{ session: any }>) {
   const { Component, pageProps } = props;
@@ -24,19 +25,21 @@ function App(props: AppProps<{ session: any }>) {
       </Head>
 
       <SessionProvider session={pageProps.session}>
-        <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
-          <NotificationsProvider>
-            <Global
-              styles={[
-                `@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');`,
-              ]}
-            />
-            <Appshell>
-              <Component {...pageProps} />
-              <Footer />
-            </Appshell>
-          </NotificationsProvider>
-        </MantineProvider>
+        <MetaMaskProvider>
+          <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
+            <NotificationsProvider>
+              <Global
+                styles={[
+                  `@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');`,
+                ]}
+              />
+              <Appshell>
+                <Component {...pageProps} />
+                <Footer />
+              </Appshell>
+            </NotificationsProvider>
+          </MantineProvider>
+        </MetaMaskProvider>
       </SessionProvider>
     </>
   );

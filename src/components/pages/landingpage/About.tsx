@@ -6,6 +6,7 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import { YOUTUBE_VIDEO } from "../../../const";
 
 const useStyles = createStyles((t) => ({
   banner: {
@@ -28,11 +29,7 @@ export default function About() {
         cols={2}
         breakpoints={[{ maxWidth: "md", cols: 1, spacing: "xl" }]}
       >
-        <iframe
-          height={327}
-          width={466}
-          src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0?autoplay=1&mute=0"
-        />
+        <iframe height={327} width={466} src={YOUTUBE_VIDEO} />
         <Stack>
           <Title>NFT Certificate for Artwork</Title>
           <Text>

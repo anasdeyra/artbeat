@@ -22,6 +22,11 @@ export default function MainUserButton() {
             <Menu.Item href={"/settings"} component={NextLink}>
               Settings
             </Menu.Item>
+            {data.user.role === "admin" && (
+              <Menu.Item href={"/post-nft"} component={NextLink}>
+                List an NFT
+              </Menu.Item>
+            )}
             <Menu.Divider></Menu.Divider>
 
             <Menu.Item
