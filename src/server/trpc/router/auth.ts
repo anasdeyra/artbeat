@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { router, publicProcedure } from "../trpc";
+import { router, publicProcedure, protectedProcedure } from "../trpc";
 import bcrypt from "bcryptjs";
 
 export const authRouter = router({
@@ -24,6 +24,14 @@ export const authRouter = router({
           name: input.name,
           password: hashedPassword,
         },
+      });
+    }),
+  updatePhoto: protectedProcedure
+    .input(z.object({ imageUrl: z.string().url() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.user.update({
+        data: { image: input.imageUrl },
+        where: { id: ctx.session.user.id },
       });
     }),
 });

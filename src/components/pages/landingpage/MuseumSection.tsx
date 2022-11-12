@@ -1,6 +1,15 @@
 import { Carousel } from "@mantine/carousel";
-import { Box, createStyles, Group, Text, Title } from "@mantine/core";
+import {
+  Box,
+  Center,
+  createStyles,
+  Group,
+  Loader,
+  Text,
+  Title,
+} from "@mantine/core";
 import { NextLink } from "@mantine/next";
+import { trpc } from "../../../utils/trpc";
 import CustomCarousel from "./CustomCarousel";
 import MuseumCard from "./MuseumCard";
 
@@ -13,6 +22,7 @@ const useStyles = createStyles((t) => ({
 }));
 
 export default function MuseumSection() {
+  const { data, isInitialLoading } = trpc.museumRouter.getAll.useQuery();
   return (
     <Box my={96} px={"xl"}>
       <Group position="apart">
@@ -28,29 +38,26 @@ export default function MuseumSection() {
           See All
         </Text>
       </Group>
-      <CustomCarousel>
-        <Carousel.Slide>
-          <MuseumCard
-            name="Museum de Louvre"
-            location="Rue de Rivoli, 75001 Paris, France"
-            image="https://images.unsplash.com/photo-1572953109213-3be62398eb95?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-          />
-        </Carousel.Slide>
-        <Carousel.Slide>
-          <MuseumCard
-            name="Museum de Louvre"
-            location="Rue de Rivoli, 75001 Paris, France"
-            image="https://images.unsplash.com/photo-1572953109213-3be62398eb95?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-          />
-        </Carousel.Slide>
-        <Carousel.Slide>
-          <MuseumCard
-            name="Museum de Louvre"
-            location="Rue de Rivoli, 75001 Paris, France"
-            image="https://images.unsplash.com/photo-1572953109213-3be62398eb95?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-          />
-        </Carousel.Slide>
-      </CustomCarousel>
+      {isInitialLoading ? (
+        <Center>
+          <Loader />
+        </Center>
+      ) : (
+        <CustomCarousel>
+          {data &&
+            data.map(({ id, address, name, mainImage }) => (
+              <Carousel.Slide>
+                <MuseumCard
+                  key={id}
+                  id={id}
+                  name={name}
+                  location={address}
+                  image={mainImage}
+                />
+              </Carousel.Slide>
+            ))}
+        </CustomCarousel>
+      )}
     </Box>
   );
 }

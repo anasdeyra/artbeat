@@ -1,7 +1,7 @@
 import { Button, Card, Image, Stack, Text } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 
-export default function MuseumCard({ image, location, name }: Props) {
+export default function MuseumCard({ image, location, name, id }: Props) {
   return (
     <Card sx={{ border: "1px solid #875A28" }} p="xs" radius={"lg"}>
       <Image radius={"md"} height={160} src={image} />
@@ -12,7 +12,7 @@ export default function MuseumCard({ image, location, name }: Props) {
         <Button
           radius={"md"}
           component={NextLink}
-          href={`/museum/${name}`}
+          href={`/museum/${id}`}
           mt={"xl"}
         >
           See Collection
@@ -26,4 +26,5 @@ interface Props {
   name: string;
   location: string;
   image: string;
+  id: string;
 }

@@ -1,5 +1,6 @@
 import { Carousel } from "@mantine/carousel";
-import { Box, Center, createStyles, Title } from "@mantine/core";
+import { Box, Center, createStyles, Loader, Title } from "@mantine/core";
+import { trpc } from "../../../utils/trpc";
 import ArtistCard from "./ArtistCard";
 import CustomCarousel from "./CustomCarousel";
 
@@ -17,6 +18,9 @@ const useStyles = createStyles((t) => ({
 
 export default function ArtisitsSection() {
   const { classes } = useStyles();
+  const { data, isInitialLoading } = trpc.artist.getArtists.useQuery({
+    limit: 6,
+  });
   return (
     <Box px={"xl"} py={96} className={classes.banner}>
       <Center mb={72}>
@@ -24,15 +28,26 @@ export default function ArtisitsSection() {
           Find the <span style={{ color: "#C4811C" }}>Artist</span>
         </Title>
       </Center>
-      <CustomCarousel>
-        <Carousel.Slide>
-          <ArtistCard
-            image="https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-            name="Rick Wright"
-            bgImage="https://images.unsplash.com/photo-1569172122301-bc5008bc09c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-          />
-        </Carousel.Slide>
-      </CustomCarousel>
+      {isInitialLoading ? (
+        <Center>
+          <Loader />
+        </Center>
+      ) : (
+        <CustomCarousel>
+          <Carousel.Slide>
+            {data &&
+              data.map(({ user, id }, i) => (
+                <ArtistCard
+                  key={i}
+                  image={user.image}
+                  name={user.name}
+                  id={id}
+                  bgImage="https://images.unsplash.com/photo-1569172122301-bc5008bc09c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+                />
+              ))}
+          </Carousel.Slide>
+        </CustomCarousel>
+      )}
     </Box>
   );
 }

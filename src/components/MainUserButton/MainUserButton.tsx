@@ -19,8 +19,11 @@ export default function MainUserButton() {
             <Menu.Item href={"/profile"} component={NextLink}>
               Profile
             </Menu.Item>
-            <Menu.Item>Settings</Menu.Item>
+            <Menu.Item href={"/settings"} component={NextLink}>
+              Settings
+            </Menu.Item>
             <Menu.Divider></Menu.Divider>
+
             <Menu.Item
               color={"red"}
               onClick={() => {

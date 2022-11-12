@@ -13,10 +13,65 @@ datasource db {
 }
 
 
-model Example {
+model Museum {
   id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  name String
+  description String @db.MediumText
+  address String
+  phone String
+  website String
+  mainImage String
+  image1 String
+  image2  String
+  tokenIds TokenId[]
+}
+
+model TokenId{
+  id Int @id
+  museum Museum? @relation(fields: [museumId],references: [id])
+  museumId String?
+
+  artist ArtistProfile @relation(fields: [artistId],references: [id])
+  artistId String
+
+
+
+}
+
+
+model Event {
+  id        String   @id @default(cuid())
+  name String
+  address String
+  description String @db.MediumText
+  date String
+  time String
+  mainImage String
+  image1 String
+  image2  String
+  ticketPrice Int
+  
+}
+
+
+model Award {
+  id String @id @default(cuid())
+  name String
+  artist ArtistProfile @relation(fields: [artistId],references: [id])
+  artistId String
+}
+
+model ArtistProfile {
+  id String @id
+  user User @relation(fields: [id],references: [id],onDelete: Cascade)
+  description String @db.MediumText
+  facebook String?
+  twitter String?
+  instagram String?
+  followers Int
+  awards Award[]
+  //Artworks
+  tokenIds TokenId[]
 }
 
 // Necessary for Next auth
@@ -56,6 +111,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   role Role @default(collector)
+  artistProfile ArtistProfile?
 }
 
 enum Role {

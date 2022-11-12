@@ -6,6 +6,7 @@ import {
   Center,
   createStyles,
   Group,
+  Loader,
   Paper,
   SimpleGrid,
   Stack,
@@ -13,10 +14,17 @@ import {
   Timeline,
   Title,
 } from "@mantine/core";
+import { NextLink } from "@mantine/next";
+import { showNotification } from "@mantine/notifications";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { BiUser } from "react-icons/bi";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { IoMdColorPalette } from "react-icons/io";
+import { NFT } from "../../components/EventCard";
 import NFTCard from "../../components/nft/NFTCard";
+import { getAllNFTsById } from "../../utils/getAllNFTsById";
+import { trpc } from "../../utils/trpc";
 
 const useStyles = createStyles((t) => ({
   banner: {
@@ -38,7 +46,9 @@ const useStyles = createStyles((t) => ({
     },
   },
   detailsContainer: {
+    width: 700,
     [t.fn.smallerThan("md")]: {
+      width: "unset",
       flexDirection: "column",
     },
   },
@@ -66,22 +76,60 @@ const useStyles = createStyles((t) => ({
 
 export default function ArtistPage() {
   const { classes } = useStyles();
+  const router = useRouter();
+  const { data, isInitialLoading } = trpc.artist.getById.useQuery({
+    //@ts-ignore
+    id: router.query.id,
+  });
 
+  if (isInitialLoading)
+    return (
+      <Box mb={96}>
+        <Box className={classes.banner} />
+        <Center mt={48}>
+          <Loader />
+        </Center>
+      </Box>
+    );
+  if (!data) {
+    showNotification({ message: "There was a problem", color: "red" });
+    return (
+      <Box mb={96}>
+        <Box className={classes.banner} />
+      </Box>
+    );
+  }
   return (
     <Box mb={96}>
       <Box className={classes.banner} />
-      <ProfileInfo />
+      <ProfileInfo
+        artworks={data.tokenIds.length}
+        description={data.description}
+        facebook={data.facebook}
+        followers={data.followers}
+        instagram={data.instagram}
+        name={data.user.name}
+        twitter={data.twitter}
+        image={data.user.image}
+      />
 
       <Box px={"xl"} className={classes.container}>
-        <Artworks />
-        <Awards />
+        <Artworks ids={data.tokenIds} />
+        <Awards awards={data.awards} />
       </Box>
     </Box>
   );
 }
 
-function Artworks() {
+function Artworks({ ids }: { ids: { id: number }[] }) {
   const { classes } = useStyles();
+  const [nfts, setNfts] = useState<NFT[]>([]);
+  useEffect(() => {
+    async function updateNFTs() {
+      setNfts(await getAllNFTsById(ids));
+    }
+    updateNFTs();
+  }, []);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -95,55 +143,56 @@ function Artworks() {
           { maxWidth: "xs", cols: 1 },
         ]}
       >
-        {[1, 1, 1, 1, 1, 1].map((_, i) => (
-          <NFTCard
-            key={i}
-            //@ts-ignore
-            metadata={{
-              artist: "Christan Gill",
-              title: "The last war",
-              image:
-                "https://images.unsplash.com/photo-1580136579312-94651dfd596d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1017&q=80",
-            }}
-          />
+        {nfts.map((nft) => (
+          <NFTCard key={nft.tokenId} {...nft} />
         ))}
       </SimpleGrid>
     </Box>
   );
 }
 
-function Awards() {
+function Awards({ awards }: { awards: { name: string }[] }) {
   const { classes } = useStyles();
+
   return (
     <Box className={classes.awardsContainer}>
       <Title order={2}>Awards</Title>
       <Timeline active={999} mt={"xl"}>
-        <Timeline.Item>
-          <Title order={4} color={"brand"} weight={600}>
-            Future Generation Art Prize 2020
-          </Title>
-        </Timeline.Item>
-        <Timeline.Item>
-          <Title order={4} color={"brand"} weight={600}>
-            Astethica Art Prize 2008
-          </Title>
-        </Timeline.Item>
-        <Timeline.Item>
-          <Title order={4} color={"brand"} weight={600}>
-            Hugo Boss Prize
-          </Title>
-        </Timeline.Item>
+        {awards.map(({ name }) => (
+          <Timeline.Item>
+            <Title order={4} color={"brand"} weight={600}>
+              {name}
+            </Title>
+          </Timeline.Item>
+        ))}
       </Timeline>
     </Box>
   );
 }
 
-function ProfileInfo() {
+function ProfileInfo({
+  artworks,
+  facebook,
+  followers,
+  instagram,
+  name,
+  twitter,
+  description,
+  image,
+}: {
+  description: string;
+  name: string;
+  followers: number;
+  artworks: number;
+  instagram: string;
+  facebook: string;
+  twitter: string;
+  image: string;
+}) {
   const { classes } = useStyles();
 
   return (
     <Center>
-      {" "}
       <Paper
         mx={"auto"}
         radius={"lg"}
@@ -152,17 +201,13 @@ function ProfileInfo() {
         mt={-24}
         className={classes.detailsWrapper}
       >
-        <Group className={classes.detailsContainer} noWrap>
+        <Group position="apart" className={classes.detailsContainer} noWrap>
           <Stack align={"center"}>
-            <Avatar
-              radius={999}
-              src="https://images.unsplash.com/photo-1505962577034-fc157cf5b274?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-              size={120}
-            />
+            <Avatar radius={999} size={120} src={image} />
 
             <Stack align={"center"} spacing="xs">
               <Text size={"lg"} weight={600}>
-                Zack Efron
+                {name}
               </Text>
               <Button size="xs" radius={"md"} variant="outline">
                 Follow
@@ -170,34 +215,53 @@ function ProfileInfo() {
             </Stack>
           </Stack>
           <Text sx={{ maxWidth: 500 }} align="center">
-            Hi, I’m Zack! I’ve always been passionate about art since I was a
-            kid. I usually create oil-on-canvas paintings. Support me if you
-            like my artworks!
+            {description}
           </Text>
 
           <Stack spacing={"xs"}>
             <Group spacing={"xs"}>
               <BiUser color="#111" size={24} />
               <Text sx={{ color: "#111" }} weight={500}>
-                500 Followers
+                {followers} Followers
               </Text>
             </Group>
             <Group spacing={"xs"}>
               <IoMdColorPalette color="#111" size={24} />
               <Text sx={{ color: "#111" }} weight={500}>
-                24 Artworks
+                {artworks} Artworks
               </Text>
             </Group>
             <Group position="apart">
-              <ActionIcon variant="transparent" color={"gray"}>
-                <FaTwitter size={24} />
-              </ActionIcon>
-              <ActionIcon variant="transparent" color={"gray"}>
-                <FaFacebook size={24} />
-              </ActionIcon>
-              <ActionIcon variant="transparent" color={"gray"}>
-                <FaInstagram size={24} />
-              </ActionIcon>
+              {twitter && (
+                <ActionIcon
+                  component={NextLink}
+                  href={twitter}
+                  variant="transparent"
+                  color={"gray"}
+                >
+                  <FaTwitter size={24} />
+                </ActionIcon>
+              )}
+              {facebook && (
+                <ActionIcon
+                  component={NextLink}
+                  href={facebook}
+                  variant="transparent"
+                  color={"gray"}
+                >
+                  <FaFacebook size={24} />
+                </ActionIcon>
+              )}
+              {instagram && (
+                <ActionIcon
+                  component={NextLink}
+                  href={instagram}
+                  variant="transparent"
+                  color={"gray"}
+                >
+                  <FaInstagram size={24} />
+                </ActionIcon>
+              )}
             </Group>
           </Stack>
         </Group>

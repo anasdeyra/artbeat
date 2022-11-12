@@ -1,10 +1,14 @@
 // src/server/trpc/router/_app.ts
 import { router } from "../trpc";
-import { contractRouter } from "./contract/contrat";
+import { artistRouter } from "./artist";
+import { eventRouter } from "./event";
+import { museumRouter } from "./museum";
 import { authRouter } from "./auth";
 
 export const appRouter = router({
-  contract: contractRouter,
+  artist: artistRouter,
+  event: eventRouter,
+  museumRouter: museumRouter,
   auth: authRouter,
 });
 

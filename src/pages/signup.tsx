@@ -17,6 +17,7 @@ import { useForm } from "@mantine/form";
 import { NextLink } from "@mantine/next";
 import { GetServerSideProps } from "next";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import { BiUser, BiEnvelope, BiLock, BiChevronDown } from "react-icons/bi";
 import { getServerAuthSession } from "../server/common/get-server-auth-session";
 import { trpc } from "../utils/trpc";
@@ -37,6 +38,7 @@ const useStyles = createStyles((t) => ({
 
 export default function SignUp() {
   const { classes } = useStyles();
+  const router = useRouter();
 
   const form = useForm({
     initialValues: { name: "", email: "", password: "", role: "" },
@@ -51,6 +53,7 @@ export default function SignUp() {
   const signupMutation = trpc.auth.signUp.useMutation({
     onSuccess: (_, { password, email }: any) => {
       signIn("credentials", { redirect: false, password, email });
+      router.reload();
     },
   });
 

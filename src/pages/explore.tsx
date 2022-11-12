@@ -13,8 +13,7 @@ import AppliedFilters from "../components/pages/explore/AppliedFilters";
 import Filters from "../components/pages/explore/Filters";
 import Pagination from "../components/pages/explore/Pagination";
 import TopFilters from "../components/pages/explore/TopFilters";
-import ABI from "../utils/ABI.json";
-import axios from "axios";
+
 import { useEffect, useState } from "react";
 import { showNotification } from "@mantine/notifications";
 import { getAllNFTs } from "../utils/getAllNFTs";
