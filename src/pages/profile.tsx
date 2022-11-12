@@ -99,11 +99,7 @@ export default function Profile() {
               <Title mt={"xl"} order={2} color="brand">
                 {data?.user?.name}
               </Title>
-              <Text color={"muted"} align="center">
-                Hi, I’m Zack! I’ve always been passionate about art since I was
-                a kid. I usually create oil-on-canvas paintings. Support me if
-                you like my artworks!
-              </Text>
+
               <Title color={"#111"} mt={"xl"} order={4}>
                 Total Collection
               </Title>
@@ -147,12 +143,6 @@ export default function Profile() {
                 { maxWidth: "xs", cols: 1 },
               ]}
             >
-              {nfts.map((props, i) => (
-                <NFTCard key={i} {...props} />
-              ))}
-              {nfts.map((props, i) => (
-                <NFTCard key={i} {...props} />
-              ))}
               {nfts.map((props, i) => (
                 <NFTCard key={i} {...props} />
               ))}
