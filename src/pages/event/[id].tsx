@@ -9,7 +9,10 @@ import {
   Stack,
   TextInput,
   Button,
+  Center,
+  Loader,
 } from "@mantine/core";
+import { inferProcedureOutput } from "@trpc/server";
 import { useRouter } from "next/router";
 import { BiBorderRadius } from "react-icons/bi";
 import {
@@ -23,6 +26,8 @@ import {
 import { MdArrowBack } from "react-icons/md";
 
 import EventCard from "../../components/EventCard";
+import { AppRouter } from "../../server/trpc/router/_app";
+import { trpc } from "../../utils/trpc";
 
 const useStyles = createStyles((t) => ({
   container: {
@@ -70,9 +75,10 @@ const useStyles = createStyles((t) => ({
 export default function Artwork() {
   const { classes } = useStyles();
   const router = useRouter();
-
-  return (
-    <>
+  const id = String(router.query.id);
+  const { data, isInitialLoading } = trpc.event.getById.useQuery({ id });
+  if (isInitialLoading)
+    return (
       <Box px={"xl"} pb={64} className={classes.container} pt={96 + 24}>
         <Group
           onClick={() => {
@@ -87,37 +93,81 @@ export default function Artwork() {
           <MdArrowBack size={24} />
           <Text variant="link">Back</Text>
         </Group>
-        <Title mt={"xl"}>Romane Statue Exhibition</Title>
-        <Box className={classes.grid} mt={"xl"}>
-          <Image
-            height={420}
-            className={classes.img1}
-            radius={"md"}
-            src="https://images.unsplash.com/photo-1526559881144-9df4bf3eb37a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80"
-          />
-
-          <Image
-            className={classes.img2}
-            height={210 - 8}
-            radius={"md"}
-            src="https://images.unsplash.com/photo-1526559881144-9df4bf3eb37a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80"
-          />
-
-          <Image
-            className={classes.img3}
-            height={210 - 8}
-            radius={"md"}
-            src="https://images.unsplash.com/photo-1526559881144-9df4bf3eb37a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80"
-          />
-        </Box>
+        <Center my={96}>
+          <Loader />
+        </Center>
       </Box>
-      <Overview />
-      <RecommendedEvents />
-    </>
+    );
+  if (data)
+    return (
+      <>
+        <Box px={"xl"} pb={64} className={classes.container} pt={96 + 24}>
+          <Group
+            onClick={() => {
+              router.back();
+            }}
+            spacing={"xs"}
+            sx={{
+              color: "#DDAB46",
+              cursor: "pointer",
+            }}
+          >
+            <MdArrowBack size={24} />
+            <Text variant="link">Back</Text>
+          </Group>
+          <Title mt={"xl"}>{data.name}</Title>
+          <Box className={classes.grid} mt={"xl"}>
+            <Image
+              height={420}
+              className={classes.img1}
+              radius={"md"}
+              src={data.mainImage}
+            />
+
+            <Image
+              className={classes.img2}
+              height={210 - 8}
+              radius={"md"}
+              src={data.image1}
+            />
+
+            <Image
+              className={classes.img3}
+              height={210 - 8}
+              radius={"md"}
+              src={data.image2}
+            />
+          </Box>
+        </Box>
+        <Overview data={data} />
+        <RecommendedEvents />
+      </>
+    );
+  return (
+    <Box px={"xl"} pb={64} className={classes.container} pt={96 + 24}>
+      <Group
+        onClick={() => {
+          router.back();
+        }}
+        spacing={"xs"}
+        sx={{
+          color: "#DDAB46",
+          cursor: "pointer",
+        }}
+      >
+        <MdArrowBack size={24} />
+        <Text variant="link">Back</Text>
+      </Group>
+      <Center my={96}>
+        <Text weight={600} size={32}>
+          There was a problem
+        </Text>
+      </Center>
+    </Box>
   );
 }
 
-function Overview() {
+function Overview({ data }: Props) {
   const { classes } = useStyles();
   return (
     <Box pt={64} px={"xl"}>
@@ -129,35 +179,22 @@ function Overview() {
           <Group>
             <FaMapMarkerAlt color="#111" size={24} />{" "}
             <Text color="#111" weight={600} size={"lg"}>
-              Paris, France
+              {data.address}
             </Text>
           </Group>
           <Group align={"start"}>
             <FaClock color="#111" size={24} />{" "}
             <Stack spacing={0}>
               <Text color="#111" weight={600} size={"lg"}>
-                Saturday 15 August 2022
+                {data.date}
               </Text>
               <Text size={"md"} color={"dimmed"}>
-                07.00 AM - 11.00 AM
+                {data.time}
               </Text>
             </Stack>
           </Group>
           <Text mt={"md"} weight={500} size={"lg"}>
-            In the world of the Ancient Greeks and Romans sculpture was one of
-            the most important means of expression and communication. Every
-            single statue, head and relief was produced with an eye to its
-            specific purpose and message. In most cases the sculpture was set up
-            in the public space, e.g. the city’s market place, burial ground,
-            theatre and sanctuary. The multiple meanings and functions of
-            sculpture in Antiquity can be experienced in the fourteen rooms
-            which house Glyptoteket’s extensive collection of ancient sculpture
-            from the Mediterranean world – primarily from Greece and the Roman
-            Empire. The exhibition is a journey through a crucial chapter in
-            European cultural history. From around 600 BCE when Greek
-            large-scale sculpture emerged, to c. 400 CE the Roman Empire. When
-            its form of government and religion, had to make way for
-            Christianity and the Empire of Byzantium.
+            {data.description}
           </Text>
         </Stack>
         <Stack className={classes.ticket}>
@@ -179,30 +216,63 @@ function Overview() {
 }
 
 function RecommendedEvents() {
+  const { data, isInitialLoading } = trpc.event.getAll.useQuery();
+  if (isInitialLoading)
+    return (
+      <Box py={64} px={"xl"}>
+        <Title size={36} order={2}>
+          <span style={{ color: "#C4811C" }}>Recommended</span> Events
+        </Title>
+        <Center py={96}>
+          <Loader />
+        </Center>
+      </Box>
+    );
+
+  if (data)
+    return (
+      <Box py={64} px={"xl"}>
+        <Title size={36} order={2}>
+          <span style={{ color: "#C4811C" }}>Recommended</span> Events
+        </Title>
+        <SimpleGrid
+          mt={"xl"}
+          cols={4}
+          breakpoints={[
+            { maxWidth: "lg", cols: 3 },
+            { maxWidth: "md", cols: 2 },
+            { maxWidth: "xs", cols: 1 },
+          ]}
+        >
+          {data.map(
+            ({ mainImage, name, date, ticketPrice, address, id }, i) => (
+              <EventCard
+                key={i}
+                price={ticketPrice}
+                details={`${date} | ${address}`}
+                image={mainImage}
+                name={name}
+                id={id}
+              />
+            )
+          )}
+        </SimpleGrid>
+      </Box>
+    );
   return (
     <Box py={64} px={"xl"}>
       <Title size={36} order={2}>
         <span style={{ color: "#C4811C" }}>Recommended</span> Events
       </Title>
-      <SimpleGrid
-        mt={"xl"}
-        cols={4}
-        breakpoints={[
-          { maxWidth: "lg", cols: 3 },
-          { maxWidth: "md", cols: 2 },
-          { maxWidth: "xs", cols: 1 },
-        ]}
-      >
-        {[1, 1, 1, 1].map((_, i) => (
-          <EventCard
-            key={i}
-            price={"500"}
-            details="07.00 pm | Paris, France"
-            image="https://images.unsplash.com/photo-1508997449629-303059a039c0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-            name="Roman Statue Exhibition"
-          />
-        ))}
-      </SimpleGrid>
+      <Center py={96}>
+        <Text weight={600} size={32}>
+          There was a problem
+        </Text>
+      </Center>
     </Box>
   );
+}
+
+interface Props {
+  data: inferProcedureOutput<AppRouter["event"]["getById"]>;
 }

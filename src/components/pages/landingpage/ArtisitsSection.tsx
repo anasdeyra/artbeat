@@ -18,9 +18,7 @@ const useStyles = createStyles((t) => ({
 
 export default function ArtisitsSection() {
   const { classes } = useStyles();
-  const { data, isInitialLoading } = trpc.artist.getArtists.useQuery({
-    limit: 6,
-  });
+  const { data, isInitialLoading } = trpc.artist.getArtists.useQuery();
   return (
     <Box px={"xl"} py={96} className={classes.banner}>
       <Center mb={72}>

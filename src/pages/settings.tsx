@@ -56,7 +56,12 @@ export default function Settings() {
       .then(({ pinataURL }) => {
         updatePhotoMutation.mutate({ imageUrl: pinataURL });
       })
-      .catch(() => {});
+      .catch(() => {
+        showNotification({
+          color: "red",
+          message: "there was a problem uploading your photo",
+        });
+      });
   }
 
   return (

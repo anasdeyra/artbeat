@@ -46,7 +46,7 @@ export default function MuseumSection() {
         <CustomCarousel>
           {data &&
             data.map(({ id, address, name, mainImage }) => (
-              <Carousel.Slide>
+              <Carousel.Slide key={id}>
                 <MuseumCard
                   key={id}
                   id={id}

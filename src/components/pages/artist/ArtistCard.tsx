@@ -9,8 +9,12 @@ import {
   Title,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import React from "react";
+import { inferProcedureOutput } from "@trpc/server";
+import React, { useEffect, useState } from "react";
 import { IoMdColorPalette } from "react-icons/io";
+import { AppRouter } from "../../../server/trpc/router/_app";
+import { getAllNFTsById } from "../../../utils/getAllNFTsById";
+import { NFT } from "../../EventCard";
 import NFTCard from "../../nft/NFTCard";
 
 const useStyles = createStyles((t) => ({
@@ -39,46 +43,45 @@ const useStyles = createStyles((t) => ({
   },
 }));
 
-export default function ArtistCard() {
+export default function ArtistCard({ data }: Props) {
   const { classes } = useStyles();
   return (
     <Group py={"xl"} noWrap align={"stretch"} className={classes.container}>
-      <ArtistSection />
-      <ArtworkSection />
+      <ArtistSection data={data} />
+      <ArtworkSection data={data} />
     </Group>
   );
 }
 
-function ArtistSection() {
+function ArtistSection({ data }: Props) {
   const { classes } = useStyles();
   return (
     <Stack className={classes.artistSection} align={"center"}>
-      <Avatar
-        src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
-        size={180}
-        radius={999}
-      />
+      <Avatar src={data.user.image} size={180} radius={999} />
       <Text size={"xl"} weight={600}>
-        Christan Gill
+        {data.user.name}
       </Text>
-      <Text align="center">
-        Hi, I’m Zack! I’ve always been passionate about art since I was a kid. I
-        usually create oil-on-canvas paintings. Support me if you like my
-        artworks!
-      </Text>
+      <Text align="center">{data.description}</Text>
       <Group mt={"xl"} sx={{ color: "#111" }} spacing={"xs"} align={"center"}>
         <IoMdColorPalette size={24} />
-        <Text weight={500}>24 Artworks</Text>
+        <Text weight={500}>{data.tokenIds.length} Artworks</Text>
       </Group>
-      <Text variant="link" component={NextLink} href="/artist/id">
+      <Text variant="link" component={NextLink} href={`/artist/${data.id}`}>
         See Details
       </Text>
     </Stack>
   );
 }
 
-function ArtworkSection() {
+function ArtworkSection({ data }: Props) {
   const { classes } = useStyles();
+  const [nfts, setNfts] = useState<NFT[]>([]);
+  useEffect(() => {
+    async function updateNFTs() {
+      setNfts(await getAllNFTsById(data.tokenIds));
+    }
+    updateNFTs();
+  }, []);
   return (
     <Box className={classes.artwokrsSection}>
       <Title order={3}>
@@ -94,19 +97,14 @@ function ArtworkSection() {
         sx={{ width: "100%" }}
         cols={3}
       >
-        {[1, 1, 1, 1, 1, 1].map((_, i) => (
-          <NFTCard
-            key={i}
-            //@ts-ignore
-            metadata={{
-              artist: "Christan Gill",
-              title: "The last war",
-              image:
-                "https://images.unsplash.com/photo-1580136579312-94651dfd596d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1017&q=80",
-            }}
-          />
+        {nfts.map((nft) => (
+          <NFTCard key={nft.tokenId} {...nft} />
         ))}
       </SimpleGrid>
     </Box>
   );
+}
+
+interface Props {
+  data: inferProcedureOutput<AppRouter["artist"]["getArtists"]>[number];
 }

@@ -15,11 +15,13 @@ export default function EventCard({
   price,
   details,
   name,
+  id,
 }: {
   image: string;
-  price: string;
+  price: number;
   details: string;
   name: string;
+  id: string;
 }) {
   return (
     <Card shadow="md" p="sm" radius="md">
@@ -37,7 +39,7 @@ export default function EventCard({
       </Box>
       <Group mt={"lg"} position="apart">
         <Text weight={"bold"}>{price} $</Text>
-        <Button component={NextLink} href={`/event/id`} size="xs">
+        <Button component={NextLink} href={`/event/${id}`} size="xs">
           Details
         </Button>
       </Group>

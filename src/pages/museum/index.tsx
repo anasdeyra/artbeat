@@ -1,6 +1,15 @@
-import { Box, createStyles, Stack, Text, Title } from "@mantine/core";
+import {
+  Box,
+  Center,
+  createStyles,
+  Loader,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import ArtistCard from "../../components/pages/artist/ArtistCard";
 import MuseumCard from "../../components/pages/museum/MuseumCard";
+import { trpc } from "../../utils/trpc";
 
 const useStyles = createStyles((t) => ({
   banner: {
@@ -17,27 +26,47 @@ const useStyles = createStyles((t) => ({
 
 export default function Museum() {
   const { classes } = useStyles();
-  return (
-    <Box>
-      <Box py={155} className={classes.banner}>
-        <Box sx={{ textAlign: "center" }}>
-          <Title size={48}>Meusems</Title>
+  const { data, isInitialLoading } = trpc.museumRouter.getAll.useQuery();
+  if (isInitialLoading)
+    return (
+      <Box>
+        <Box py={155} className={classes.banner}>
+          <Box sx={{ textAlign: "center" }}>
+            <Title size={48}>Meusems</Title>
 
-          <Text>
-            Showing a list of museums that own various magnificent art
-            collections made by very talented artists
-          </Text>
+            <Text>
+              Showing a list of museums that own various magnificent art
+              collections made by very talented artists
+            </Text>
+          </Box>
         </Box>
+        <Center py={196}>
+          <Loader />
+        </Center>
       </Box>
+    );
+  if (data)
+    return (
+      <Box>
+        <Box py={155} className={classes.banner}>
+          <Box sx={{ textAlign: "center" }}>
+            <Title size={48}>Meusems</Title>
 
-      <Title px={"xl"} my={"xl"} size={36} order={2}>
-        <span style={{ color: "#C4811C" }}>Meusems</span> List
-      </Title>
-      <Stack mt={32} spacing={48} mb={96} px={"xl"}>
-        <MuseumCard />
-        <MuseumCard />
-        <MuseumCard />
-      </Stack>
-    </Box>
-  );
+            <Text>
+              Showing a list of museums that own various magnificent art
+              collections made by very talented artists
+            </Text>
+          </Box>
+        </Box>
+
+        <Title px={"xl"} my={"xl"} size={36} order={2}>
+          <span style={{ color: "#C4811C" }}>Meusems</span> List
+        </Title>
+        <Stack mt={32} spacing={48} mb={96} px={"xl"}>
+          {data.map((data) => (
+            <MuseumCard key={data.id} data={data} />
+          ))}
+        </Stack>
+      </Box>
+    );
 }

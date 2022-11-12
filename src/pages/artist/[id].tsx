@@ -158,8 +158,8 @@ function Awards({ awards }: { awards: { name: string }[] }) {
     <Box className={classes.awardsContainer}>
       <Title order={2}>Awards</Title>
       <Timeline active={999} mt={"xl"}>
-        {awards.map(({ name }) => (
-          <Timeline.Item>
+        {awards.map(({ name }, i) => (
+          <Timeline.Item key={i}>
             <Title order={4} color={"brand"} weight={600}>
               {name}
             </Title>

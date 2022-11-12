@@ -58,19 +58,16 @@ const getById = publicProcedure
     return profile;
   });
 
-const getArtists = publicProcedure
-  .input(z.object({ limit: z.number() }).optional())
-  .query(async ({ ctx, input }) => {
-    const artists = await ctx.prisma.artistProfile.findMany({
-      take: input.limit,
-      include: {
-        user: { select: { name: true, image: true } },
-        awards: { select: { name: true } },
-        tokenIds: { select: { id: true } },
-      },
-    });
-    return artists;
+const getArtists = publicProcedure.query(async ({ ctx, input }) => {
+  const artists = await ctx.prisma.artistProfile.findMany({
+    include: {
+      user: { select: { name: true, image: true } },
+      awards: { select: { name: true } },
+      tokenIds: { select: { id: true } },
+    },
   });
+  return artists;
+});
 
 export const artistRouter = router({
   upsert,

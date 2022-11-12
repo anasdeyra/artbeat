@@ -10,8 +10,12 @@ import {
   Title,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import React from "react";
+import { inferProcedureOutput } from "@trpc/server";
+import React, { useEffect, useState } from "react";
 import { IoMdColorPalette } from "react-icons/io";
+import { AppRouter } from "../../../server/trpc/router/_app";
+import { getAllNFTsById } from "../../../utils/getAllNFTsById";
+import { NFT } from "../../EventCard";
 import NFTCard from "../../nft/NFTCard";
 
 const useStyles = createStyles((t) => ({
@@ -42,40 +46,42 @@ const useStyles = createStyles((t) => ({
   },
 }));
 
-export default function MuseumCard() {
+export default function MuseumCard({ data }: Props) {
   const { classes } = useStyles();
   return (
     <Group py={"xl"} noWrap align={"stretch"} className={classes.container}>
-      <MuseumSection />
-      <ArtworkSection />
+      <MuseumSection data={data} />
+      <ArtworkSection data={data} />
     </Group>
   );
 }
 
-function MuseumSection() {
+function MuseumSection({ data }: Props) {
   const { classes } = useStyles();
   return (
     <Stack className={classes.museumSection} align={"center"}>
-      <Image
-        src="https://images.unsplash.com/photo-1512075021972-fd248fb21ee7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-        height={250}
-        width={"100%"}
-        radius="md"
-      />
+      <Image src={data.mainImage} height={250} width={"100%"} radius="md" />
       <Text size={"xl"} align="center" weight={600}>
-        Louvre Museum
+        {data.name}
       </Text>
-      <Text align="center">Rue de Rivoli, 75001 Paris, France</Text>
+      <Text align="center">{data.address}</Text>
 
-      <Text variant="link" component={NextLink} href="/museum/id">
+      <Text variant="link" component={NextLink} href={`/museum/${data.id}`}>
         See Details
       </Text>
     </Stack>
   );
 }
 
-function ArtworkSection() {
+function ArtworkSection({ data }: Props) {
   const { classes } = useStyles();
+  const [nfts, setNfts] = useState<NFT[]>([]);
+  useEffect(() => {
+    async function updateNFTs() {
+      setNfts(await getAllNFTsById(data.tokenIds));
+    }
+    updateNFTs();
+  }, []);
   return (
     <Box className={classes.artwokrsSection}>
       <Title order={3}>
@@ -91,19 +97,14 @@ function ArtworkSection() {
         sx={{ width: "100%" }}
         cols={3}
       >
-        {[1, 1, 1, 1, 1, 1].map((_, i) => (
-          <NFTCard
-            key={i}
-            //@ts-ignore
-            metadata={{
-              artist: "Christan Gill",
-              title: "The last war",
-              image:
-                "https://images.unsplash.com/photo-1580136579312-94651dfd596d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1017&q=80",
-            }}
-          />
+        {nfts.map((nft) => (
+          <NFTCard key={nft.tokenId} {...nft} />
         ))}
       </SimpleGrid>
     </Box>
   );
+}
+
+interface Props {
+  data: inferProcedureOutput<AppRouter["museumRouter"]["getById"]>;
 }
