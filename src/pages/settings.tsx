@@ -82,7 +82,11 @@ export default function Settings() {
               </Center>
             )}
             <FileButton onChange={onUpload} accept="image/png,image/jpeg">
-              {(props) => <Button {...props}>Change image</Button>}
+              {(props) => (
+                <Button loading={updatePhotoMutation.isLoading} {...props}>
+                  Change image
+                </Button>
+              )}
             </FileButton>
             {data && data.user.role === "artist" && (
               <NavLink

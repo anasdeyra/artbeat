@@ -57,7 +57,10 @@ export default function ConnectWallet() {
   }
 
   const handleClick = () => {
-    if (status === "notConnected") connect();
+    if (status === "notConnected")
+      connect().then(() => {
+        router.reload();
+      });
   };
 
   useEffect(() => {

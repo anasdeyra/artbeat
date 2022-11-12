@@ -40,6 +40,7 @@ const useStyles = createStyles((t) => ({
     [t.fn.smallerThan("md")]: {
       flexDirection: "column",
       marginTop: -100,
+      width: "100%",
       position: "relative",
       marginLeft: 16,
       marginRight: 16,
@@ -48,7 +49,7 @@ const useStyles = createStyles((t) => ({
   detailsContainer: {
     width: 700,
     [t.fn.smallerThan("md")]: {
-      width: "unset",
+      width: "100%",
       flexDirection: "column",
     },
   },

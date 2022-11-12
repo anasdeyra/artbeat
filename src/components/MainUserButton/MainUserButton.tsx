@@ -4,13 +4,13 @@ import { signOut } from "next-auth/react";
 import { BiUser } from "react-icons/bi";
 import { trpc } from "../../utils/trpc";
 
-export default function MainUserButton() {
+export default function MainUserButton({ color = "white" }) {
   const { data } = trpc.auth.getSession.useQuery();
   return (
     <Menu>
       <Menu.Target>
         <ActionIcon color={undefined} variant="transparent" size={"lg"}>
-          <BiUser color="white" size={32} />
+          <BiUser color={color} size={32} />
         </ActionIcon>
       </Menu.Target>
       <Menu.Dropdown>

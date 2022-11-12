@@ -45,6 +45,11 @@ const useStyles = createStyles((t) => ({
   container: {
     maxWidth: 700,
     width: 700,
+    [t.fn.smallerThan("md")]: {
+      width: "100%",
+      marginLeft: 16,
+      marginRight: 16,
+    },
     marginTop: t.spacing.xl * 2,
     zIndex: 1,
   },

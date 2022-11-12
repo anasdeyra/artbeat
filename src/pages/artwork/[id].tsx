@@ -30,8 +30,19 @@ const useStyles = createStyles((t) => ({
     color: "white",
   },
   imageContainer: {
-    width: 700,
+    width: "100%",
   },
+  mainConatiner: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: t.spacing.xl,
+    [t.fn.smallerThan("md")]: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "stretch",
+    },
+  },
+  detailsContainer: {},
 }));
 
 export default function Artwork() {
@@ -93,7 +104,7 @@ export default function Artwork() {
           </Center>
         )}
         {nft && (
-          <Group grow align={"start"} spacing={"xl"} mt={"xl"}>
+          <Box className={classes.mainConatiner} mt={"xl"}>
             <Stack className={classes.imageContainer} spacing={48}>
               <Image
                 alt={nft.metadata.title}
@@ -102,7 +113,7 @@ export default function Artwork() {
               />
               <ArtistCard name={nft.metadata.artist} artwokrsCount={900} />
             </Stack>
-            <Stack>
+            <Stack className={classes.detailsContainer}>
               <Title>{nft.metadata.title}</Title>
               <Text>{nft.metadata.description}</Text>
               <SimpleGrid mt={"xl"} cols={2}>
@@ -123,7 +134,7 @@ export default function Artwork() {
                 Buy now
               </Button>
             </Stack>
-          </Group>
+          </Box>
         )}
       </Box>
       <Box py={64} px={"xl"}>
@@ -135,7 +146,16 @@ export default function Artwork() {
             <Loader />
           </Center>
         ) : (
-          <SimpleGrid spacing={"lg"} mt={"xl"} cols={4}>
+          <SimpleGrid
+            breakpoints={[
+              { maxWidth: "lg", cols: 3 },
+              { maxWidth: "md", cols: 2 },
+              { maxWidth: "xs", cols: 1 },
+            ]}
+            spacing={"lg"}
+            mt={"xl"}
+            cols={4}
+          >
             {nfts.map((props, i) => (
               <NFTExploreCard {...props} key={i} />
             ))}{" "}

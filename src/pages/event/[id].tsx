@@ -176,13 +176,13 @@ function Overview({ data }: Props) {
       </Title>
       <Box mt={48} className={classes.overviewConatiner}>
         <Stack>
-          <Group>
+          <Group noWrap align={"start"}>
             <FaMapMarkerAlt color="#111" size={24} />{" "}
             <Text color="#111" weight={600} size={"lg"}>
               {data.address}
             </Text>
           </Group>
-          <Group align={"start"}>
+          <Group noWrap align={"start"}>
             <FaClock color="#111" size={24} />{" "}
             <Stack spacing={0}>
               <Text color="#111" weight={600} size={"lg"}>

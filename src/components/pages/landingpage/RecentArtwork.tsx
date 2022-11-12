@@ -23,6 +23,18 @@ const useStyles = createStyles((t) => ({
   filter: {
     position: "absolute",
     alignSelf: "center",
+    [t.fn.smallerThan("md")]: {
+      marginLeft: 16,
+      marginRight: 16,
+    },
+  },
+  filterContainer: {
+    [t.fn.smallerThan("md")]: {
+      flexDirection: "column",
+      gap: 16,
+      justifyContent: "center",
+      alignItems: "center",
+    },
   },
 }));
 
@@ -58,11 +70,11 @@ export default function RecentArtwork() {
           mt={-48 - 128}
           className={classes.filter}
         >
-          <Group spacing={72}>
+          <Group className={classes.filterContainer} spacing={72}>
             <Title order={2}>
               <span style={{ color: "#C4811C" }}>Art</span> by categories
             </Title>
-            <Group>
+            <Group position={"center"}>
               <Button radius={"md"} compact variant="outline">
                 Paintings
               </Button>

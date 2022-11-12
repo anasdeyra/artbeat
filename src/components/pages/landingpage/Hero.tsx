@@ -17,27 +17,38 @@ const useStyles = createStyles((t) => ({
     color: "white",
     position: "relative",
     backgroundColor: "#111",
+    paddingTop: 64 + 72,
+    paddingLeft: t.spacing.xl,
+    paddingRight: t.spacing.xl,
+    paddingBottom: 155,
+    display: "flex",
+    [t.fn.largerThan("md")]: {
+      display: "grid",
+      gridColumn: "1f 1fr",
+      paddingTop: 64 + 155,
+      paddingLeft: 155,
+      paddingRight: 155,
+    },
+  },
+  onbig: {
+    [t.fn.smallerThan("md")]: { display: "none" },
+  },
+  heading: {
+    fontSize: 64,
+    [t.fn.smallerThan("md")]: { fontSize: 58 },
   },
 }));
 
 export default function Hero() {
   const { classes } = useStyles();
   return (
-    <SimpleGrid
-      px={155}
-      pb={155}
-      pt={155 + 64}
-      className={classes.container}
-      cols={2}
-    >
+    <SimpleGrid className={classes.container} cols={2}>
       <Overlay zIndex={0} opacity={0.6} color="#000" />
       <Stack align={"start"} sx={{ zIndex: 1 }}>
-        <Title size={64}>
-          The Art <br /> of Gifting
-        </Title>
+        <Title className={classes.heading}>The Art of Gifting</Title>
         <Text size={"md"}>
-          Curated art marketplace that helps you discover <br /> and buy
-          authentic artworks
+          Curated art marketplace that helps you discover and buy authentic
+          artworks
         </Text>{" "}
         <Text
           variant="link"
@@ -57,6 +68,7 @@ export default function Hero() {
           placeSelf: "center",
           marginTop: -50,
         }}
+        className={classes.onbig}
       >
         <Image src="/ab2.png" />
       </Box>

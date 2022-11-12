@@ -31,6 +31,9 @@ const useStyles = createStyles((t) => ({
     borderLeft: "1px solid #875A28",
     width: 300,
     height: "100%",
+    [t.fn.smallerThan("md")]: {
+      display: "none",
+    },
   },
 }));
 
@@ -71,10 +74,15 @@ export default function Explore() {
               spacing={"xl"}
               sx={{ width: "full" }}
               cols={3}
+              breakpoints={[
+                { maxWidth: "sm", cols: 2 },
+                { maxWidth: "xs", cols: 1 },
+                { minWidth: "xl", cols: 4 },
+              ]}
             >
               {nfts.map((props, i) => (
                 <NFTExploreCard {...props} key={i} />
-              ))}{" "}
+              ))}
             </SimpleGrid>
           )}
 

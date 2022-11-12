@@ -1,10 +1,20 @@
-import { Group, Select, TextInput } from "@mantine/core";
+import { createStyles, Group, Select, TextInput } from "@mantine/core";
 import { BiChevronDown } from "react-icons/bi";
 import { MdSearch } from "react-icons/md";
 
+const useStyles = createStyles((t) => ({
+  filters: {
+    [t.fn.smallerThan("xs")]: {
+      flexDirection: "column",
+      alignItems: "stretch",
+    },
+  },
+}));
+
 export default function TopFilters() {
+  const { classes } = useStyles();
   return (
-    <Group>
+    <Group className={classes.filters}>
       <CategorySelect />
       <SearchInput />
     </Group>

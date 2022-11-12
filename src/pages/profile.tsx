@@ -29,6 +29,30 @@ const useStyles = createStyles((t) => ({
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
   },
+  container: {
+    flexWrap: "nowrap",
+    [t.fn.smallerThan("md")]: {
+      flexDirection: "column",
+    },
+  },
+  detailsWrapper: {
+    [t.fn.smallerThan("md")]: {
+      alignSelf: "center",
+    },
+  },
+  detailsContainer: {
+    width: 300,
+    [t.fn.smallerThan("md")]: {
+      width: "100%",
+    },
+  },
+  collection: {
+    flexGrow: 1,
+    [t.fn.smallerThan("md")]: {
+      alignSelf: "stretch",
+      textAlign: "center",
+    },
+  },
 }));
 
 export default function Profile() {
@@ -56,13 +80,19 @@ export default function Profile() {
   return (
     <Box mb={96}>
       <Box className={classes.banner} />
-      <Group spacing={48} mt={24} align={"start"} px={"xl"}>
-        <Stack mt={-124} spacing={48}>
+      <Group
+        className={classes.container}
+        spacing={48}
+        mt={24}
+        align={"start"}
+        px={"xl"}
+      >
+        <Stack className={classes.detailsWrapper} mt={-124} spacing={48}>
           <Paper p={24} radius={"lg"} shadow={"md"}>
             <Stack
+              className={classes.detailsContainer}
               mb={"xl"}
               spacing={"xs"}
-              sx={{ width: 300 }}
               align={"center"}
             >
               <Avatar radius={999} src={data?.user?.image} size={140} />
@@ -97,7 +127,7 @@ export default function Profile() {
           </Text>
         </Stack>
 
-        <Stack sx={{ flexGrow: 1 }}>
+        <Stack className={classes.collection}>
           <Title color="brand" order={1}>
             My <span style={{ color: "#111" }}>collection</span>
           </Title>
@@ -106,7 +136,23 @@ export default function Profile() {
               <Loader />
             </Center>
           ) : (
-            <SimpleGrid mt={"xl"} sx={{ width: "full" }} cols={3}>
+            <SimpleGrid
+              mt={"xl"}
+              sx={{ width: "full" }}
+              cols={3}
+              breakpoints={[
+                { maxWidth: "lg", cols: 2 },
+                { maxWidth: "md", cols: 3 },
+                { maxWidth: "sm", cols: 2 },
+                { maxWidth: "xs", cols: 1 },
+              ]}
+            >
+              {nfts.map((props, i) => (
+                <NFTCard key={i} {...props} />
+              ))}
+              {nfts.map((props, i) => (
+                <NFTCard key={i} {...props} />
+              ))}
               {nfts.map((props, i) => (
                 <NFTCard key={i} {...props} />
               ))}

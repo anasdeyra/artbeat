@@ -1,5 +1,13 @@
-import { ActionIcon, Group } from "@mantine/core";
+import { ActionIcon, createStyles, Group } from "@mantine/core";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
+const useStyles = createStyles((t) => ({
+  filters: {
+    [t.fn.smallerThan("xs")]: {
+      flexDirection: "column",
+      alignItems: "stretch",
+    },
+  },
+}));
 
 export default function Pagination({
   active,
@@ -8,8 +16,9 @@ export default function Pagination({
   active: number;
   pageCount: number;
 }) {
+  const { classes } = useStyles();
   return (
-    <Group spacing={"sm"}>
+    <Group noWrap align={"start"} spacing={"sm"}>
       <ActionIcon variant="transparent" color={"brand"} size="md">
         <MdArrowBack size={24} />
       </ActionIcon>

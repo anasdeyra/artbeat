@@ -18,6 +18,14 @@ const useStyles = createStyles((t) => ({
     position: "relative",
     color: "white",
   },
+  iframe: {
+    height: 327,
+    width: 466,
+    [t.fn.smallerThan("xs")]: {
+      width: "auto",
+      height: "auto",
+    },
+  },
 }));
 
 export default function About() {
@@ -27,9 +35,10 @@ export default function About() {
       <SimpleGrid
         sx={{ placeItems: "center" }}
         cols={2}
+        spacing={32}
         breakpoints={[{ maxWidth: "md", cols: 1, spacing: "xl" }]}
       >
-        <iframe height={327} width={466} src={YOUTUBE_VIDEO} />
+        <iframe className={classes.iframe} src={YOUTUBE_VIDEO} />
         <Stack>
           <Title>NFT Certificate for Artwork</Title>
           <Text>
