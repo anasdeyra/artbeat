@@ -43,28 +43,6 @@ export default function ArtisitsSection() {
                 />
               </Carousel.Slide>
             ))}
-          {data &&
-            data.map(({ user, id }, i) => (
-              <Carousel.Slide key={i}>
-                <ArtistCard
-                  image={user.image}
-                  name={user.name}
-                  id={id}
-                  bgImage="https://images.unsplash.com/photo-1569172122301-bc5008bc09c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-                />
-              </Carousel.Slide>
-            ))}
-          {data &&
-            data.map(({ user, id }, i) => (
-              <Carousel.Slide key={i}>
-                <ArtistCard
-                  image={user.image}
-                  name={user.name}
-                  id={id}
-                  bgImage="https://images.unsplash.com/photo-1569172122301-bc5008bc09c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-                />
-              </Carousel.Slide>
-            ))}
         </CustomCarousel>
       )}
     </Box>
